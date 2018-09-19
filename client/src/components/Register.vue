@@ -2,10 +2,11 @@
   <v-layout column>
     <v-flex>
       <div class="white elevation-2">
-        <v-toolbar flat dense class="cyan" dark>
-          <v-toolbar-title>Register</v-toolbar-title>
-        </v-toolbar>
-          <div class="pl-6 pr-6 pt-2 pb-2">
+        <panel title="Regsiter">
+          <form name="register-form" autocomplete="off">
+            <v-text-field type="text" name="user_name" placeholder="username" v-model="user_name">
+            </v-text-field>
+            <br>
             <v-text-field type="email" name="email" placeholder="email" v-model="email">
             </v-text-field>
             <br>
@@ -15,7 +16,8 @@
             <div v-html="error"></div>
             <br>
             <v-btn id="btn_register">Register</v-btn>
-          </div>
+          </form>
+        </panel>
       </div>
     </v-flex>
   </v-layout>
@@ -23,10 +25,15 @@
 
 <script>
 import AuthenticationServices from '@/services/AuthenticationService'
+import Panel from '@/components/Panel'
 
 export default {
+  components: {
+    Panel
+  },
   data () {
     return {
+      user_name: '',
       email: '',
       password: '',
       error: null
@@ -38,10 +45,13 @@ export default {
   methods: {
     async register () {
       try {
-        await AuthenticationServices.register({
+        const response = await AuthenticationServices.register({
+          user_name: this.user_name,
           email: this.email,
           password: this.password
         })
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setToken', response.data.token)
       } catch (error) {
         this.error = error.response.data.error
       }

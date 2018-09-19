@@ -13,9 +13,14 @@ module.exports = {
   async register (req, res) {
     try {
       const user = await User.create(req.body)
-      res.send(user.toJSON())
+      const userJson = user.toJSON()
+      res.send({
+        user: userJson,
+        token: jwtSignUser(userJson)
+      })
     } catch (err) {
       res.status(400).send({
+        err: err,
         error: 'this email account already exists'
       })
     }
@@ -26,7 +31,7 @@ module.exports = {
       const { email, password } = req.body
       const user = await User.findOne({
         where: {
-          email: email 
+          email: email
         }
       })
 
@@ -35,11 +40,12 @@ module.exports = {
           error: 'The login info was incorrect'
         })
       }
-
-      const isPasswordValid = password === user.password
+      console.log(password + ' heyheyhey')
+      const isPasswordValid = await user.comparePassword(password)
+      console.log(isPasswordValid)
       if (!isPasswordValid) {
         return res.status(403).send({
-          error: 'The login info was incorrect'
+          error: 'The login info was incorrect pass'
         })
       }
 

@@ -4,16 +4,23 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
+import { sync } from 'vuex-router-sync'
 import 'vuetify/dist/vuetify.min.css'
+import store from '@/store/store'
+import home from '@/components/Home'
 
 Vue.config.productionTip = false
 
 Vue.use(Vuetify)
 
+sync(store, router)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  store,
+  components: { App, home },
+  template: '<App/>',
+  render: h => h(App)
 })
