@@ -1,7 +1,6 @@
 <template>
   <v-layout column>
     <v-flex>
-      <div class="white elevation-2">
         <panel title="Login">
           <form name="register-form">
             <v-text-field type="email" name="email" placeholder="email" v-model="email">
@@ -15,7 +14,6 @@
             <v-btn id="btn_register">Login</v-btn>
           </form>
         </panel>
-      </div>
     </v-flex>
   </v-layout>
 </template>
